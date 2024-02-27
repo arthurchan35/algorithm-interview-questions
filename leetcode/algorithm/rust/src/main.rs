@@ -2,6 +2,7 @@ mod add_two_numbers;
 mod contains_duplicate;
 mod group_anagrams;
 mod is_anagram;
+mod product_of_array_except_self;
 mod remove_duplicates;
 mod top_k_frequent_elements;
 mod two_sum;
@@ -14,6 +15,8 @@ fn main() {
 	is_anagram::Solution::is_anagram(String::new(), String::new());
 
 	group_anagrams::Solution::group_anagrams(vec![]);
+
+	product_of_array_except_self::Solution::product_except_self(vec![]);
 
 	remove_duplicates::Solution::remove_duplicates(&mut vec![1]);
 

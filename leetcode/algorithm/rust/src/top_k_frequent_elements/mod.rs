@@ -93,11 +93,11 @@ mod tests {
 
 		let expected_set:HashSet<i32> = vec![1,3,5].into_iter().collect();
 
-		//assert!(result.len() == expected_set.len());
+		assert!(result.len() == expected_set.len());
 
 		// todo: assertion condition is wrong, fix it or maybe not
 		for num in &result {
-			//assert!(expected_set.contains(num));
+			assert!(expected_set.contains(num));
 		}
 	}
 }
