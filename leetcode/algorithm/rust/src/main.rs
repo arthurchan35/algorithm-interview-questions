@@ -6,6 +6,7 @@ mod product_of_array_except_self;
 mod remove_duplicates;
 mod top_k_frequent_elements;
 mod two_sum;
+mod valid_sudoku;
 
 fn main() {
 	add_two_numbers::Solution::add_two_numbers(None, None);
@@ -23,4 +24,6 @@ fn main() {
 	top_k_frequent_elements::Solution::top_k_frequent(vec![], 2);
 
 	two_sum::Solution::two_sum(vec![2,7,11,15], 22);
+
+	valid_sudoku::Solution::is_valid_sudoku(vec![vec![]]);
 }
