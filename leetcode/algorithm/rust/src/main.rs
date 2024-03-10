@@ -7,6 +7,7 @@ mod remove_duplicates;
 mod top_k_frequent_elements;
 mod two_sum;
 mod valid_sudoku;
+mod longest_consecutive_sequence;
 
 fn main() {
 	add_two_numbers::Solution::add_two_numbers(None, None);
@@ -16,6 +17,8 @@ fn main() {
 	is_anagram::Solution::is_anagram(String::new(), String::new());
 
 	group_anagrams::Solution::group_anagrams(vec![]);
+
+	longest_consecutive_sequence::Solution::longest_consecutive(vec![]);
 
 	product_of_array_except_self::Solution::product_except_self(vec![]);
 
