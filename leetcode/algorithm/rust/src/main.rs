@@ -7,6 +7,7 @@ mod product_of_array_except_self;
 mod remove_duplicates;
 mod top_k_frequent_elements;
 mod two_sum;
+mod two_sum_ii;
 mod valid_palindrome;
 mod valid_sudoku;
 
@@ -28,6 +29,8 @@ fn main() {
 	top_k_frequent_elements::Solution::top_k_frequent(vec![], 2);
 
 	two_sum::Solution::two_sum(vec![2,7,11,15], 22);
+
+	two_sum_ii::Solution::two_sum(vec![2,7,11,15], 22);
 
 	valid_palindrome::Solution::is_palindrome(String::new());
 
