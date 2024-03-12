@@ -1,23 +1,20 @@
-use std::collections::HashSet;
-
 pub struct Solution {
 }
 
 impl Solution {
+
 	pub fn three_sum(nums: Vec<i32>) -> Vec<Vec<i32>> {
 
 		if nums.len() < 3 {
 			return vec![];
 		}
 
-		let mut sorted_nums = nums.clone();
+		let mut sorted_nums = nums;
 		sorted_nums.sort();
-
-		let num_set:HashSet<i32> = nums.into_iter().collect();
 
 		let mut results:Vec<Vec<i32>> = Vec::with_capacity(sorted_nums.len());
 
-		for i in 0.. sorted_nums.len() {
+		for i in 0.. sorted_nums.len() - 2 {
 
 			let ith = sorted_nums[i];
 
@@ -27,39 +24,42 @@ impl Solution {
 				continue;
 			}
 
-			for j in i + 1.. sorted_nums.len() {
+			let mut j = i + 1;
+			let mut k = sorted_nums.len() - 1;
 
-				let jth = sorted_nums[j];
+			while j < k {
 
 				// j should only use next different number
+				// e.g. -3, 0, 0, 1, 2, 3, 3
 
-				if j > i + 1 && jth == sorted_nums[j - 1] {
+				if j > i + 1 && sorted_nums[j] == sorted_nums[j - 1] {
+					j += 1;
 					continue;
 				}
 
-				if let Some(last_num_ref) = num_set.get(&(0 - ith - jth)) {
+				// k should only use next different number
+				// e.g. -3, 0, 0, 1, 2, 3, 3
 
-					// if the 3rd number found is smaller than j,
-					// then the 3rd number is definitely used as i before
-
-					if *last_num_ref < jth {
-						continue;
-					}
-					if *last_num_ref > jth {
-						results.push(vec![ith, jth, *last_num_ref]);
-						continue;
-					}
-
-					// *last_num_ref == jth, e.g. input:[-1, 0, 0, 0, 1]
-					// one result will be: 0, 0, 0
-
-					if j < sorted_nums.len() - 1 && jth == sorted_nums[j + 1] {
-						results.push(vec![ith, jth, *last_num_ref]);
-					}
-
+				if k < sorted_nums.len() - 1 && sorted_nums[k] == sorted_nums[k + 1] {
+					k -= 1;
 					continue;
-
 				}
+
+				let sum = ith + sorted_nums[j] + sorted_nums[k];
+
+				if sum > 0 {
+					k -= 1;
+					continue;
+				}
+
+				if sum < 0 {
+					j += 1;
+					continue;
+				}
+
+				results.push(vec![ith, sorted_nums[j], sorted_nums[k]]);
+				j += 1;
+				k -= 1;
 			}
 		}
 
@@ -100,6 +100,14 @@ mod tests {
 		let results = Solution::three_sum(vec![-1,0,1,2,-1,-4,-2,-3,3,0,4]);
 
 		assert_eq!(9, results.len());
+		for vec in results {
+			assert!(vec.len() == 3);
+			assert_eq!(0, vec.iter().sum());
+		}
+
+		let results = Solution::three_sum(vec![-4,-2,1,-5,-4,-4,4,-2,0,4,0,-2,3,1,-5,0]);
+
+		assert_eq!(6, results.len());
 		for vec in results {
 			assert!(vec.len() == 3);
 			assert_eq!(0, vec.iter().sum());
