@@ -1,4 +1,5 @@
 mod add_two_numbers;
+mod container_with_most_water;
 mod contains_duplicate;
 mod group_anagrams;
 mod is_anagram;
@@ -14,6 +15,8 @@ mod valid_sudoku;
 
 fn main() {
 	add_two_numbers::Solution::add_two_numbers(None, None);
+
+	container_with_most_water::Solution::max_area(vec![]);
 
 	contains_duplicate::Solution::contains_duplicate(vec![1]);
 
