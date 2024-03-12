@@ -6,6 +6,7 @@ mod longest_consecutive_sequence;
 mod product_of_array_except_self;
 mod remove_duplicates;
 mod top_k_frequent_elements;
+mod three_sum;
 mod two_sum;
 mod two_sum_ii;
 mod valid_palindrome;
@@ -27,6 +28,8 @@ fn main() {
 	remove_duplicates::Solution::remove_duplicates(&mut vec![1]);
 
 	top_k_frequent_elements::Solution::top_k_frequent(vec![], 2);
+
+	three_sum::Solution::three_sum(vec![]);
 
 	two_sum::Solution::two_sum(vec![2,7,11,15], 22);
 
