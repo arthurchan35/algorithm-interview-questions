@@ -21,35 +21,49 @@ impl Solution {
 
 		let mut results:Vec<Vec<i32>> = Vec::with_capacity(nums.len());
 
+		let mut two_sum:HashSet<i32> = HashSet::with_capacity(nums.len());
+
 		for i in 0.. nums.len() {
 
-			if let Some(count_ref) = nums_counts.get_mut(&nums[i]) {
+			let ith_num = nums[i];
 
-				// for each result in results, make sure nums[i] is not used more than once
+			if let Some(count_ref) = nums_counts.get_mut(&ith_num) {
 				*count_ref -= 1;
+			}
 
-				for j in i + 1.. nums.len() {
+			for jth_num_ref in nums.iter().skip(i + 1) {
 
-					if let Some(count_ref) = nums_counts.get_mut(&nums[j]) {
-						// for each result in results, make sure nums[j] is not used more than once
-						*count_ref -= 1;
-					}
+				let jth_num = *jth_num_ref;
 
-					if let Some(count_ref) = nums_counts.get(&(0 - nums[i] - nums[j])) {
-						if *count_ref > 0 {
-							results.push(vec![nums[i], nums[j], 0 - nums[i] - nums[j]]);
-						}
-					}
+				if two_sum.contains(&(ith_num + jth_num)) {
+					continue;
+				}
 
-					if let Some(count_ref) = nums_counts.get_mut(&nums[j]) {
-						*count_ref += 1;
+				if let Some(count_ref) = nums_counts.get_mut(&jth_num) {
+					*count_ref -= 1;
+				}
+
+				let last_num = 0 - ith_num - jth_num;
+
+				if let Some(last_num_ref) = nums_counts.get_key_value(&last_num) {
+					if *last_num_ref.1 > 0 {
+						two_sum.insert(ith_num + jth_num);
+						two_sum.insert(ith_num + last_num);
+						two_sum.insert(jth_num + last_num);
+
+						results.push(vec![ith_num, jth_num, last_num]);
 					}
 				}
-	
-				if let Some(count_ref) = nums_counts.get_mut(&nums[i]) {
+
+				if let Some(count_ref) = nums_counts.get_mut(&jth_num) {
 					*count_ref += 1;
 				}
 			}
+
+			if let Some(count_ref) = nums_counts.get_mut(&ith_num) {
+				*count_ref += 1;
+			}
+
 		}
 
 		results
