@@ -5,6 +5,7 @@ mod contains_duplicate;
 mod group_anagrams;
 mod is_anagram;
 mod longest_consecutive_sequence;
+mod longest_substring_without_repeating_characters;
 mod product_of_array_except_self;
 mod remove_duplicates;
 mod top_k_frequent_elements;
@@ -28,6 +29,8 @@ fn main() {
 	group_anagrams::Solution::group_anagrams(vec![]);
 
 	longest_consecutive_sequence::Solution::longest_consecutive(vec![]);
+
+	longest_substring_without_repeating_characters::Solution::length_of_longest_substring("test".to_string());
 
 	product_of_array_except_self::Solution::product_except_self(vec![]);
 
