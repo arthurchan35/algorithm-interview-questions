@@ -1,4 +1,5 @@
 mod add_two_numbers;
+mod best_time_to_buy_and_sell_stock;
 mod container_with_most_water;
 mod contains_duplicate;
 mod group_anagrams;
@@ -15,6 +16,8 @@ mod valid_sudoku;
 
 fn main() {
 	add_two_numbers::Solution::add_two_numbers(None, None);
+
+	best_time_to_buy_and_sell_stock::Solution::max_profit(vec![]);
 
 	container_with_most_water::Solution::max_area(vec![]);
 
