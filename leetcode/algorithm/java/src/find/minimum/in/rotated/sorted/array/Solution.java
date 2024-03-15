@@ -9,7 +9,9 @@ package find.minimum.in.rotated.sorted.array;
  */
 class Solution {
 
-	private int findMin(int[] nums, int l, int m, int r) {
+	private int findMin(int[] nums, int l, int r) {
+
+		int m = (l + r) / 2;
 
 		// 1
 		if (l == r) {
@@ -31,35 +33,14 @@ class Solution {
 		}
 
 		if (nums[m] < nums[r]) {
-			int length = m - l;
-
-			int mid = length / 2 + l;
-	
-			if ((length & 1) == 0) {
-				mid -= 1;
-			}
-
-			return findMin(nums, l, mid, m - 1);
+			return findMin(nums, l, m - 1);
 		}
 		else {
-			int length = r - m;
-
-			int mid = length / 2 + m + 1;
-	
-			if ((length & 1) == 0) {
-				mid -= 1;
-			}
-
-			return findMin(nums, m + 1, mid, r);
+			return findMin(nums, m + 1, r);
 		}
 	}
 
 	public int findMin(int[] nums) {
-		int mid = nums.length / 2;
-		if ((nums.length & 1) == 0) {
-			mid -= 1;
-		}
-
-		return findMin(nums, 0, mid, nums.length - 1);
+		return findMin(nums, 0, nums.length - 1);
 	}
 }
