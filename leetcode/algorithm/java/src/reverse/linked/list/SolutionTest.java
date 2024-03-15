@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import util.singlely.linked.list.node.ListNode;
+
 public class SolutionTest {
 
 	private ListNode buildList() {
