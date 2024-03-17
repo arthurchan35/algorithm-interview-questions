@@ -7,6 +7,17 @@ import java.util.List;
 
 import util.tree.node.TreeNode;
 
+// if the problem becomes an online problem that tree could be modified
+// we need a max priority queue with size set to k
+// if the tree exists, then traverse the tree and
+//		get the k smallest elements and insert them into priority queue
+//		O(kLogN) time complexity
+// if a node bigger than kth smallest node is inserted into the tree, nothing happens to the priority queue
+// if a node smaller than kth smallest node is inserted into the tree,
+// insert the node into priority queue and pop the biggest node (k + 1)th from priority queue
+//		O(2Logn) time compleixity
+// simliar to delete operation
+// get kth smallest element is always constant time
 class Solution {
 	private List<Integer> nodes = new LinkedList<>();
 
