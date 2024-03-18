@@ -31,7 +31,7 @@ class Solution {
 	}
 
 	public List<List<Integer>> combinationSum(int[] candidates, int target) {
-		Arrays.sort(candidates);
+		//Arrays.sort(candidates);
 
 		combinationSum(candidates, target, candidates.length  - 1);
 
