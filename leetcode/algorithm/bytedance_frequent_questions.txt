@@ -1,0 +1,11 @@
+ugly number:
+https://leetcode.com/problems/ugly-number/description/
+
+reverse linked list:
+https://leetcode.com/problems/reverse-linked-list/description/
+
+least recent used cache:
+https://leetcode.com/problems/lru-cache/description/
+
+traverse inorder preorder post
+https://www.nowcoder.com/practice/a9fec6c46a684ad5a3abd4e365a9d362
