@@ -1,6 +1,6 @@
 package implement.trie;
 
-class Trie {
+public class Trie {
 
 	private class Node {
 		boolean terminal = false;
