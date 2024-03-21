@@ -15,15 +15,12 @@ class Solution {
 			return false;
 		}
 
-		if (pacificReachable[i][j] == null) {
-			if (currentPathVisited[i][j]) {// and pacificReachable[i][j] == null
-				return false;
-			}
+		if (pacificReachable[i][j] != null) {
+			return pacificReachable[i][j];
 		}
-		else {
-			if (pacificReachable[i][j]) {
-				return true;
-			}
+
+		if (currentPathVisited[i][j]) {
+			return false;
 		}
 
 		// when a place is not determined, and asks for a result from next slot
@@ -89,15 +86,12 @@ class Solution {
 			return false;
 		}
 
-		if (atlanticReachable[i][j] == null) {
-			if (currentPathVisited[i][j]) {// and pacificReachable[i][j] == null
-				return false;
-			}
+		if (atlanticReachable[i][j] != null) {
+			return atlanticReachable[i][j];
 		}
-		else {
-			if (atlanticReachable[i][j]) {
-				return true;
-			}
+
+		if (currentPathVisited[i][j]) {
+			return false;
 		}
 
 		// backtracking
