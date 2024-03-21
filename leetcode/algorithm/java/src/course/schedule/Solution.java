@@ -41,21 +41,21 @@ class Solution {
 		HashMap<Integer, ArrayList<Integer>> deps =
 			new HashMap<>(prerequisites.length * prerequisites[0].length);
 
-			HashSet<Integer> pathDups =
-			new HashSet<>(prerequisites.length * prerequisites[0].length);
+		HashSet<Integer> pathDups =
+		new HashSet<>(prerequisites.length * prerequisites[0].length);
 
-			for (int i = 0; i < prerequisites.length; ++i) {
-				var list = deps.computeIfAbsent(prerequisites[i][1], key -> new ArrayList<>());
-				list.add(prerequisites[i][0]);
+		for (int i = 0; i < prerequisites.length; ++i) {
+			var list = deps.computeIfAbsent(prerequisites[i][1], key -> new ArrayList<>());
+			list.add(prerequisites[i][0]);
+		}
+
+		for (int course = 0; course < numCourses; ++course) {
+			boolean canFinish = canFinish(course, deps, pathDups);
+
+			if (!canFinish) {
+				return false;
 			}
-	
-			for (int course = 0; course < numCourses; ++course) {
-				boolean canFinish = canFinish(course, deps, pathDups);
-	
-				if (!canFinish) {
-					return false;
-				}
-			}
+		}
 
 		return true;
 	}
