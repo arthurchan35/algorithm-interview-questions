@@ -11,14 +11,13 @@ class Solution {
 			return maxValues[index];
 		}
 
-		int maxValuesAtIndexMinus3 = rob(nums, maxValues, index - 3);
 		int maxValuesAtIndexMinus2 = rob(nums, maxValues, index - 2);
-		rob(nums, maxValues, index - 1);
+		int maxValuesAtIndexMinus1 = rob(nums, maxValues, index - 1);
 
 		maxValues[index] =
-			maxValuesAtIndexMinus3 > maxValuesAtIndexMinus2 ?
-			maxValuesAtIndexMinus3 + nums[index] :
-			maxValuesAtIndexMinus2 + nums[index];
+			maxValuesAtIndexMinus2 + nums[index] > maxValuesAtIndexMinus1 ?
+			maxValuesAtIndexMinus2 + nums[index] :
+			maxValuesAtIndexMinus1;
 
 		return maxValues[index];
 	}
@@ -31,12 +30,9 @@ class Solution {
 		Integer[] maxValues = new Integer[nums.length];
 
 		maxValues[0] = nums[0];
-		maxValues[1] = nums[1];
 
 		rob(nums, maxValues, nums.length - 1);
 
-		return maxValues[nums.length - 1] > maxValues[nums.length - 2] ?
-			maxValues[nums.length - 1] :
-			maxValues[nums.length - 2];
+		return maxValues[nums.length - 1];
 	}
 }
