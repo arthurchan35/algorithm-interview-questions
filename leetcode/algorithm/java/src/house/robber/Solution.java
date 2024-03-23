@@ -27,18 +27,21 @@ class Solution {
 			return nums[0];
 		}
 
-		Integer[] maxValues = new Integer[nums.length];
+		int maxValuesAtIndexMinus2 = nums[0];
+		int maxValuesAtIndexMinus1 = nums[1] > nums[0] ? nums[1] : nums[0];
 
-		maxValues[0] = nums[0];
-		maxValues[1] = nums[1] > nums[0] ? nums[1] : nums[0];
+		int maxValuesAtIndex = maxValuesAtIndexMinus1;
 
 		for (int i = 2; i < nums.length; ++i) {
-			maxValues[i] =
-				maxValues[i - 2] + nums[i] > maxValues[i - 1] ?
-				maxValues[i - 2] + nums[i] :
-				maxValues[i - 1];
+			maxValuesAtIndex =
+				maxValuesAtIndexMinus2 + nums[i] > maxValuesAtIndexMinus1 ?
+				maxValuesAtIndexMinus2 + nums[i] :
+				maxValuesAtIndexMinus1;
+
+			maxValuesAtIndexMinus2 = maxValuesAtIndexMinus1;
+			maxValuesAtIndexMinus1 = maxValuesAtIndex;
 		}
 
-		return maxValues[nums.length - 1];
+		return maxValuesAtIndex;
 	}
 }
