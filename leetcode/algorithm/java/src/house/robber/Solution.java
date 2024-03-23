@@ -30,8 +30,14 @@ class Solution {
 		Integer[] maxValues = new Integer[nums.length];
 
 		maxValues[0] = nums[0];
+		maxValues[1] = nums[1] > nums[0] ? nums[1] : nums[0];
 
-		rob(nums, maxValues, nums.length - 1);
+		for (int i = 2; i < nums.length; ++i) {
+			maxValues[i] =
+				maxValues[i - 2] + nums[i] > maxValues[i - 1] ?
+				maxValues[i - 2] + nums[i] :
+				maxValues[i - 1];
+		}
 
 		return maxValues[nums.length - 1];
 	}
