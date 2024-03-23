@@ -1,14 +1,36 @@
 package number.of.connected.component.in.an.undirected.graph;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
 class Solution {
-	public int countComponents(int n, int[][] edges) {
-		HashMap<Integer, Integer> ancestorMap = new HashMap<>(n);
 
-		HashMap<Integer, ArrayList<Integer>> descendantMap = new HashMap<>(n);
+	private int findAncestor(HashMap<Integer, Integer> parentMap, int current) {
+		Integer parent = parentMap.get(current);
+		if (parent == null) {
+			parentMap.put(current, current);
+			return current;
+		}
+
+		if (current == parent) {
+			return current;
+		}
+
+		int ancestor = findAncestor(parentMap, parent);
+
+		// path compression
+		parentMap.put(current, ancestor);
+
+		return ancestor;
+	}
+
+	public int countComponents(int n, int[][] edges) {
+		HashMap<Integer, Integer> parentMap = new HashMap<>(n);
+
+		// ideally we should keep track of a tree height for each tree of head node ancestor
+		// but with path compression, some of the children path will be shrinked
+		// thus it's impossible to track real height of a tree
+		HashMap<Integer, Integer> treeHeightUpperBoundMap = new HashMap<>(n);
 
 		HashSet<Integer> nodeInEdge = new HashSet<>(n);
 
@@ -16,39 +38,27 @@ class Solution {
 			nodeInEdge.add(edges[i][0]);
 			nodeInEdge.add(edges[i][1]);
 
-			Integer ancestor0 = ancestorMap.get(edges[i][0]);
-			Integer ancestor1 = ancestorMap.get(edges[i][1]);
+			int ancestor0 = findAncestor(parentMap, edges[i][0]);
+			int ancestor1 = findAncestor(parentMap, edges[i][1]);
 
-			// both are newlly inserted, choose one to be ancestor for both
-			if (ancestor0 == null && ancestor1 == null) {
-				ancestorMap.put(edges[i][0], edges[i][0]);
-				ancestorMap.put(edges[i][1], edges[i][0]);
+			// both are newlly inserted, choose one to be parent for both
+			if (ancestor0 == edges[i][0] && ancestor1 == edges[i][1]) {
+				parentMap.put(edges[i][0], edges[i][0]);
+				parentMap.put(edges[i][1], edges[i][0]);
 
-				var descendants =
-					descendantMap.computeIfAbsent(edges[i][0], key -> new ArrayList<>(n));
-				descendants.add(edges[i][0]);
-				descendants.add(edges[i][1]);
-
+				treeHeightUpperBoundMap.put(edges[i][0], 1);
 				continue;
 			}
 
-			// one of them has no ancestor, set this one's ancestor to be the other's ancestor
-			if (ancestor0 != null && ancestor1 == null) {
-				ancestorMap.put(edges[i][1], ancestor0);
-
-				var descendants = descendantMap.get(ancestor0);
-				descendants.add(edges[i][1]);
-
+			// one of them has no parent, set this one's parent to be the other's parent
+			if (ancestor0 != edges[i][0] && ancestor1 == edges[i][1]) {
+				parentMap.put(edges[i][1], ancestor0);
 				continue;
 			}
 
-			// one of them has no ancestor, set this one's ancestor to be the other's ancestor
-			if (ancestor1 != null && ancestor0 == null) {
-				ancestorMap.put(edges[i][0], ancestor1);
-
-				var descendants = descendantMap.get(ancestor1);
-				descendants.add(edges[i][0]);
-
+			// one of them has no parent, set this one's parent to be the other's parent
+			if (ancestor0 == edges[i][0] && ancestor1 != edges[i][1]) {
+				parentMap.put(edges[i][0], ancestor1);
 				continue;
 			}
 
@@ -56,27 +66,25 @@ class Solution {
 				continue;
 			}
 
-			var descendants0 = descendantMap.get(ancestor0);
-			var descendants1 = descendantMap.get(ancestor1);
+			int treeHeightUpperBound0 = treeHeightUpperBoundMap.get(ancestor0);
+			int treeHeightUpperBound1 = treeHeightUpperBoundMap.get(ancestor1);
 
-			if (descendants0.size() < descendants1.size()) {
-				for (int descendant : descendants0) {
-					ancestorMap.put(descendant, ancestor1);
-				}
-
-				descendantMap.remove(ancestor0);
-				descendants1.addAll(descendants0);
+			if (treeHeightUpperBound0 < treeHeightUpperBound1) {
+				parentMap.put(edges[i][0], ancestor1);
+			}
+			else if (treeHeightUpperBound1 < treeHeightUpperBound0) {
+				parentMap.put(edges[i][1], ancestor0);
 			}
 			else {
-				for (int descendant : descendants1) {
-					ancestorMap.put(descendant, ancestor0);
-				}
-
-				descendantMap.remove(ancestor1);
-				descendants0.addAll(descendants1);
+				parentMap.put(edges[i][0], ancestor1); // or parentMap.put(edges[i][1], ancestor0);
+				treeHeightUpperBoundMap.put(ancestor1, treeHeightUpperBound0 + 1);
 			}
 		}
 
-		return descendantMap.size() + n - nodeInEdge.size();
+		for (int parent : parentMap.values()) {
+			nodeInEdge.remove(findAncestor(parentMap, parent));
+		}
+
+		return n - nodeInEdge.size();
 	}
 }
