@@ -2,24 +2,20 @@ package house.robber;
 
 class Solution {
 
-	private int rob(int[] nums, Integer[] maxValues, int index) {
-		if (index < 0) {
-			return 0;
+	private void rob(int[] nums, int[] maxValues, int index) {
+		if (index >= nums.length) {
+			return;
 		}
 
-		if (maxValues[index] != null) {
-			return maxValues[index];
-		}
+		int newCurrentMaxValue = maxValues[0] + nums[index] > maxValues[1] ?
+			maxValues[0] + nums[index] :
+			maxValues[1];
 
-		int maxValuesAtIndexMinus2 = rob(nums, maxValues, index - 2);
-		int maxValuesAtIndexMinus1 = rob(nums, maxValues, index - 1);
+		maxValues[0] = maxValues[1];
+		maxValues[1] = newCurrentMaxValue;
+		maxValues[2] = maxValues[1];
 
-		maxValues[index] =
-			maxValuesAtIndexMinus2 + nums[index] > maxValuesAtIndexMinus1 ?
-			maxValuesAtIndexMinus2 + nums[index] :
-			maxValuesAtIndexMinus1;
-
-		return maxValues[index];
+		rob(nums, maxValues, index + 1);
 	}
 
 	public int rob(int[] nums) {
@@ -27,21 +23,15 @@ class Solution {
 			return nums[0];
 		}
 
-		int maxValuesAtIndexMinus2 = nums[0];
-		int maxValuesAtIndexMinus1 = nums[1] > nums[0] ? nums[1] : nums[0];
+		int[] maxValues = new int[3];
 
-		int maxValuesAtIndex = maxValuesAtIndexMinus1;
+		maxValues[0] = nums[0];
+		maxValues[1] = nums[1] > nums[0] ? nums[1] : nums[0];
 
-		for (int i = 2; i < nums.length; ++i) {
-			maxValuesAtIndex =
-				maxValuesAtIndexMinus2 + nums[i] > maxValuesAtIndexMinus1 ?
-				maxValuesAtIndexMinus2 + nums[i] :
-				maxValuesAtIndexMinus1;
+		maxValues[2] = maxValues[1];
 
-			maxValuesAtIndexMinus2 = maxValuesAtIndexMinus1;
-			maxValuesAtIndexMinus1 = maxValuesAtIndex;
-		}
+		rob(nums, maxValues, 2);
 
-		return maxValuesAtIndex;
+		return maxValues[2];
 	}
 }
