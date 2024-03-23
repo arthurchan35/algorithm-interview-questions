@@ -1,30 +1,22 @@
 package climbing.stairs;
 
 class Solution {
-	private void climbStairs(int n, int[] dp) {
-		if (n < 3) {
-			dp[n - 1] = n;
-		}
-
-		if (dp[n - 1] > 0) {
-			return;
-		}
-
-		if (dp[n - 3] < 1) {
-			climbStairs(n - 2, dp);
-		}
-		if (dp[n - 2] < 1) {
-			climbStairs(n - 1, dp);
-		}
-
-		dp[n - 1] = dp[n - 3] + dp[n - 2];
-	}
 
 	public int climbStairs(int n) {
-		int[] dp = new int[n];
+		if (n < 3) {
+			return n;
+		}
 
-		climbStairs(n, dp);
+		int secondLastStep = 1;
+		int firstLastStep = 2;
+		int current = 0;
 
-		return dp[n - 1];
+		for (int i = 3; i < n + 1; ++i) {
+			current = secondLastStep + firstLastStep;
+			secondLastStep = firstLastStep;
+			firstLastStep = current;
+		}
+
+		return current;
 	}
 }
