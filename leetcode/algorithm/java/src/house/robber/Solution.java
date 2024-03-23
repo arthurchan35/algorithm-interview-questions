@@ -2,20 +2,23 @@ package house.robber;
 
 class Solution {
 
-	private void rob(int[] nums, int[] maxValues, int index) {
-		if (index >= nums.length) {
-			return;
+	// nums need to be size of 2 at least
+	private int[] rob(int[] nums, int index) {
+		if (index == 1) {
+			return new int[] {nums[0], nums[0] > nums[1] ? nums[0] : nums[1]};
 		}
 
-		int newCurrentMaxValue = maxValues[0] + nums[index] > maxValues[1] ?
-			maxValues[0] + nums[index] :
-			maxValues[1];
+
+		int[] maxValues = rob(nums, index - 1);
+
+		int maxValueAtIndex =
+			maxValues[0] + nums[index] >  maxValues[1] ?
+			maxValues[0] + nums[index] : maxValues[1];
 
 		maxValues[0] = maxValues[1];
-		maxValues[1] = newCurrentMaxValue;
-		maxValues[2] = maxValues[1];
+		maxValues[1] = maxValueAtIndex;
 
-		rob(nums, maxValues, index + 1);
+		return maxValues;
 	}
 
 	public int rob(int[] nums) {
@@ -23,15 +26,8 @@ class Solution {
 			return nums[0];
 		}
 
-		int[] maxValues = new int[3];
+		int[] maxValues = rob(nums, nums.length - 1);
 
-		maxValues[0] = nums[0];
-		maxValues[1] = nums[1] > nums[0] ? nums[1] : nums[0];
-
-		maxValues[2] = maxValues[1];
-
-		rob(nums, maxValues, 2);
-
-		return maxValues[2];
+		return maxValues[1];
 	}
 }
