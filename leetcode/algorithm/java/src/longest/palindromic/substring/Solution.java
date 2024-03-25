@@ -2,62 +2,59 @@ package longest.palindromic.substring;
 
 class Solution {
 
-	// if string from index 1 to index 10(exclusive) is a palindrom
-	// then isPalindromeIndex[1][10] is true
-	Boolean[][] isPalindromeIndex;
+	int[] maxSpan = new int[2];
 
-	private boolean isPalindrome(String s, int i, int j) {
+	private void spanFromCenter(String s, int center, boolean odd) {
 
-		if (isPalindromeIndex[i][j] != null) {
-			return isPalindromeIndex[i][j];
-		}
+		int l = center;
+		int r = odd ? center + 1 : center + 2;
 
-		if (i >= j - 1) {
-			isPalindromeIndex[i][j] = true;
-			return true;
-		}
+		int maxLeft = l;
+		int maxRight = odd ? center + 1 : center;
 
-		if (s.charAt(i) == s.charAt(j - 1)) {
-			boolean isSubPalindrome = isPalindrome(s, i + 1, j - 1);
 
-			if (isSubPalindrome == false) {
-				isPalindromeIndex[i][j] = false;
-				return false;
+		while (true) {
+			if (l < 0) {
+				break;
 			}
 
-			isPalindromeIndex[i][j] = true;
-			return true;
-		}
-		else {
-			isPalindromeIndex[i][j] = false;
-			return false;
-		}
-	}
-	private int[] longestPalindrome(String s, int i, int j) {
-		if (isPalindrome(s, i, j)) {
-			return new int[]{i, j};
+			char leftChar = s.charAt(l);
+
+			if (r - 1 >= s.length()) {
+				break;
+			}
+
+			char rightChar = s.charAt(r - 1);
+
+			if (leftChar != rightChar) {
+				break;
+			}
+
+			maxLeft = l;
+			maxRight = r;
+
+			l -= 1;
+			r += 1;
+
 		}
 
-		int[] left = longestPalindrome(s, i, j - 1);
-		int[] right = longestPalindrome(s, i + 1, j);
-
-		if (left[1] - left[0] > right[1] - right[0]) {
-			return left;
-		}
-		else {
-			return right;
+		if (maxSpan[1] - maxSpan[0] < maxRight - maxLeft) {
+			maxSpan[1] = maxRight;
+			maxSpan[0] = maxLeft;
 		}
 	}
 
 	public String longestPalindrome(String s) {
-		isPalindromeIndex = new Boolean[s.length() + 1][s.length() + 1];
 
-		int[] longestRange = longestPalindrome(s, 0, s.length());
-
-		if (longestRange[1] - longestRange[0] > 0) {
-			return s.substring(longestRange[0], longestRange[1]);
+		if (s.length() < 1) {
+			return "";
 		}
 
-		return "";
+		for (int i = 0; i < s.length(); ++i) {
+			spanFromCenter(s, i, true);
+			spanFromCenter(s, i, false);
+		}
+
+		return s.substring(maxSpan[0], maxSpan[1]);
 	}
 }
