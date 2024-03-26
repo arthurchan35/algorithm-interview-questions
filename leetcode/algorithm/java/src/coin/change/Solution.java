@@ -1,13 +1,15 @@
 package coin.change;
 
-import java.util.Arrays;
+import java.util.HashMap;
 
 class Solution {
 
-	private int countCoins(int[] coins, int currentCoinIndex, int ammout) {
+	HashMap<Integer, Integer> leastCoinsForAmmount;
+
+	private void countCoins(int[] coins, int currentCoinIndex, int ammout) {
 
 		if (currentCoinIndex < 0) {
-			return -1;
+			return;
 		}
 
 		int currentCoin = coins[currentCoinIndex];
@@ -17,25 +19,39 @@ class Solution {
 		int modulo = ammout % currentCoin;
 
 		if (modulo == 0) {
-			return currentCoinCount;
+			Integer currentLeastCoinsCount = leastCoinsForAmmount.get(ammout);
+
+			if (currentLeastCoinsCount == null || currentLeastCoinsCount > currentCoinCount) {
+				leastCoinsForAmmount.put(ammout, currentCoinCount);
+			}
 		}
 
 		while (currentCoinCount > -1) {
-			int restCoinsCount = countCoins(
+			countCoins(
 				coins, currentCoinIndex - 1, ammout - currentCoinCount * currentCoin);
 
-			if (restCoinsCount > 0) {
-				return currentCoinCount + restCoinsCount;
+			Integer restCoinsCount = leastCoinsForAmmount.get(ammout - currentCoinCount * currentCoin);
+
+			if (restCoinsCount != null) {
+				Integer currentLeastCoinsCount = leastCoinsForAmmount.get(ammout);
+
+				if (currentLeastCoinsCount == null || currentLeastCoinsCount > currentCoinCount + restCoinsCount) {
+					leastCoinsForAmmount.put(ammout, currentCoinCount + restCoinsCount);
+				}
 			}
 
 			currentCoinCount -= 1;
 		}
-
-		return -1;
 	}
 
 	public int coinChange(int[] coins, int amount) {
-		Arrays.sort(coins);
-		return countCoins(coins, coins.length - 1, amount);
+
+		leastCoinsForAmmount = new HashMap<>(amount);
+
+		countCoins(coins, coins.length - 1, amount);
+
+		Integer leastCoinsCount = leastCoinsForAmmount.get(amount);
+
+		return leastCoinsCount == null ? -1 : leastCoinsCount;
 	}
 }
