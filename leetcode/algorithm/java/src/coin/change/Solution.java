@@ -6,52 +6,45 @@ class Solution {
 
 	HashMap<Integer, Integer> leastCoinsForAmmount;
 
-	private void countCoins(int[] coins, int currentCoinIndex, int ammout) {
-
-		if (currentCoinIndex < 0) {
-			return;
+	private int countCoins(int[] coins, int ammout) {
+		if (ammout < 0) {
+			return -1;
 		}
 
-		int currentCoin = coins[currentCoinIndex];
+		Integer currentCoinsCount = leastCoinsForAmmount.get(ammout);
+		if (currentCoinsCount != null) {
+			return currentCoinsCount;
+		}
 
-		int currentCoinCount = ammout / currentCoin;
+		int minRestCoins = -1;
 
-		int modulo = ammout % currentCoin;
+		for (int coin : coins) {
+			int restCoins = countCoins(coins, ammout - coin);
 
-		if (modulo == 0) {
-			Integer currentLeastCoinsCount = leastCoinsForAmmount.get(ammout);
+			if (restCoins < 0) {
+				continue;
+			}
 
-			if (currentLeastCoinsCount == null || currentLeastCoinsCount > currentCoinCount) {
-				leastCoinsForAmmount.put(ammout, currentCoinCount);
+			if (minRestCoins == -1) {
+				minRestCoins = restCoins;
+			}
+			else if (minRestCoins > restCoins) {
+				minRestCoins = restCoins;
 			}
 		}
 
-		while (currentCoinCount > -1) {
-			countCoins(
-				coins, currentCoinIndex - 1, ammout - currentCoinCount * currentCoin);
+		int currentMinCoins = minRestCoins == -1 ? -1 : minRestCoins + 1;
 
-			Integer restCoinsCount = leastCoinsForAmmount.get(ammout - currentCoinCount * currentCoin);
-
-			if (restCoinsCount != null) {
-				Integer currentLeastCoinsCount = leastCoinsForAmmount.get(ammout);
-
-				if (currentLeastCoinsCount == null || currentLeastCoinsCount > currentCoinCount + restCoinsCount) {
-					leastCoinsForAmmount.put(ammout, currentCoinCount + restCoinsCount);
-				}
-			}
-
-			currentCoinCount -= 1;
-		}
+		leastCoinsForAmmount.put(ammout, currentMinCoins);
+		return currentMinCoins;
 	}
 
 	public int coinChange(int[] coins, int amount) {
 
 		leastCoinsForAmmount = new HashMap<>(amount);
 
-		countCoins(coins, coins.length - 1, amount);
+		leastCoinsForAmmount.put(0, 0);
 
-		Integer leastCoinsCount = leastCoinsForAmmount.get(amount);
-
-		return leastCoinsCount == null ? -1 : leastCoinsCount;
+		return countCoins(coins, amount);
 	}
 }
