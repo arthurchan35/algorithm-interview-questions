@@ -1,8 +1,5 @@
 package reverse.nodes.in.k.group;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-
 import util.singlely.linked.list.node.ListNode;
 
 class Solution {
@@ -25,55 +22,59 @@ class Solution {
 			return head;
 		}
 
-		Deque<ListNode> headNodes = new ArrayDeque<>();
+		ListNode prevHead = null;
+		ListNode currHead = head;
 
 		ListNode current = head;
 
-		int count = k;
+		ListNode newHead = head;
+
+		int count = 0;
+
 		while (current != null) {
-			if (count == k) {
-				headNodes.offerLast(current);
-				count = 0;
+			count += 1;
+
+			if (count == k + 1) {
+				// we have found next head
+				ListNode newCurrentHead = reverseNodeInGroup(null, currHead, current);
+
+				ListNode test = newCurrentHead;
+
+				while (test != null) {
+					test = test.next;
+				}
+				if (prevHead != null) {
+					prevHead.next = newCurrentHead;
+				}
+
+				if (newHead == head) {
+					newHead = newCurrentHead;
+				}
+
+				prevHead = currHead;
+				currHead = current;
+
+				count = 1;
 			}
 
 			current = current.next;
-			count += 1;
 		}
 
-
-		ListNode prevHead = null;
-		ListNode newHead = null;
-
-		while (!headNodes.isEmpty()) {
-			ListNode currentHead = headNodes.pollFirst();
-
-			// at the last group
-			if (headNodes.isEmpty()) {
-
-				// last group is in-complete
-				if (count != k) {
-					if (prevHead != null) {
-						prevHead.next = currentHead;
-					}
-					else {
-						newHead = currentHead;
-					}
-					break;
-				}
-			}
-
-			ListNode nextHead = headNodes.peekFirst();
-
-			ListNode newCurrentHead = reverseNodeInGroup(null, currentHead, nextHead);
+		if (count == k) {
+			ListNode newCurrentHead = reverseNodeInGroup(null, currHead, null);
 
 			if (prevHead != null) {
 				prevHead.next = newCurrentHead;
 			}
-			else {
+
+			if (newHead == head) {
 				newHead = newCurrentHead;
 			}
-
-			prevHead = currentHead;
+		}
+		else {
+			if (prevHead != null) {
+				prevHead.next = currHead;
+			}
 		}
 
 		return newHead;

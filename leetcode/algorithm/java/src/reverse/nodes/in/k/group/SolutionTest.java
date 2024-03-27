@@ -33,7 +33,7 @@ public class SolutionTest {
 			System.out.print(test.val + ", ");
 			test = test.next;
 		}*/
-		ListNode newHead1 = sol.reverseKGroup(head1, 5);
+		ListNode newHead1 = sol.reverseKGroup(head1, 4);
 
 		while (newHead1 != null) {
 			System.out.print(newHead1.val + ", ");
